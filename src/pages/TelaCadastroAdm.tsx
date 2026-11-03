@@ -4,7 +4,7 @@ import { useAdm } from "../hooks/useAdm";
 import { useEffect } from "react";
 
 function TelaCadastroAdm () {
-    const {mensagem, nome,  email, senha, setNome, setEmail, setSenha, cadastrarAdm, alterarAdministrador}  = useAdm();
+    const {mensagem, id, setId, nome,  email, senha, setNome, setEmail, setSenha, cadastrarAdm, alterarAdministrador}  = useAdm();
 
 const location = useLocation();
 
@@ -12,11 +12,13 @@ const administrador = location.state?.administrador;
 
 useEffect(() => {
 if(administrador ){
+    setId(administrador.id);
 setNome(administrador.nome);
 setEmail(administrador.email);
 setSenha(administrador.senha);
 }    
 else{
+    setId("");
     setNome("");
     setEmail("");
     setSenha("");
@@ -39,9 +41,15 @@ return (
         </div>
         <form id="forCadAdm"  
         onSubmit={(evento)=> {
-            administrador?alterarAdministrador(evento, administrador.email): cadastrarAdm(evento)
+            administrador?alterarAdministrador(evento, administrador.id): cadastrarAdm(evento)
         }}>
  
+<div>
+    <input type="hidden" id="txtId"
+    value={id}
+    onChange={(evento) => setId(evento.target.value)}/>
+</div>
+
  <div>
                 <label htmlFor="txtNome">
                     Nome
