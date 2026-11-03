@@ -2,8 +2,10 @@ import { useLocation } from "react-router";
 import MenuAdm from "../components/MenuAdm";
 import { useAdm } from "../hooks/useAdm";
 import { useEffect } from "react";
+import useLogin from "../hooks/useLogin";
 
 function TelaCadastroAdm () {
+    const {verificarUsarioLogado} = useLogin();
     const {mensagem, id, setId, nome,  email, senha, setNome, setEmail, setSenha, cadastrarAdm, alterarAdministrador}  = useAdm();
 
 const location = useLocation();
@@ -11,6 +13,7 @@ const location = useLocation();
 const administrador = location.state?.administrador;
 
 useEffect(() => {
+    verificarUsarioLogado();
 if(administrador ){
     setId(administrador.id);
 setNome(administrador.nome);
