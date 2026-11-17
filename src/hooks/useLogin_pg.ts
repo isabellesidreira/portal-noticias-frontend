@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router";
-import type Administrador from "../interfaces/Administrador";
 import axios from "axios";
 
 function useLogin () {
@@ -8,9 +7,12 @@ function useLogin () {
     const [senha, setSenha] =  useState("");
     const [mensagem, setMensagem] = useState("");
     const navigate = useNavigate();
+
     async function realizarLogin (evento: React.SubmitEvent<HTMLFormElement>) {
+       
         evento.preventDefault();
-try {
+
+        try {
     // enviar os dados para o servidor
     const resposta = await axios.post(  
         "http://localhost:3000/login",
@@ -20,7 +22,9 @@ try {
         }
     )
     setMensagem(resposta.data.mensagem);
+
     localStorage.setItem("usuarioLogado", "sim");
+
 localStorage.setItem(
     "administradorLogado",
     JSON.stringify(resposta.data.administrador)
@@ -32,7 +36,15 @@ navigate("/adm");
 
 } catch (error) {
     if(axios.isAxiosError(error)){
+
+setMensagem("");
+
+setTimeout(() => {
 setMensagem(error.response?.data?.mensagem);
+    
+}, 1000);
+
+
     }
 
     else{
