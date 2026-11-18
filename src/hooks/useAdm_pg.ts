@@ -17,15 +17,20 @@ const API = "http://localhost:3000/administradores";
 
 async function cadastrarAdm(evento: React.SubmitEvent<HTMLFormElement>){
 evento.preventDefault();
-const administrador: Administrador = {id: crypto.randomUUID(), nome, email, senha};
-const listaAdministradores = JSON.parse(localStorage.getItem("listaAdministradores") || "[]");
-listaAdministradores.push(administrador);
-localStorage.setItem("listaAdministradores", JSON.stringify(listaAdministradores));
-setMensagem("Cadastro realizado com sucesso");
+
+try {
+    const resposta = await axios.post(API, {
+        nome, email, senha
+    });
+    setMensagem(resposta.data.mensagem);
 setTimeout(() => {
     limparCampos();
-
 }, 1000);
+}
+    catch (error) {
+    console.log(error);
+    setMensagem("Erro ao cadastrar administrador: " +  error);
+}
 }
 
 function limparCampos () {
