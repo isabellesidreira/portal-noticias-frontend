@@ -52,39 +52,33 @@ try {
 }
 }
 
-function excluirAdministrador(id: string){
-const listaAdministradores = buscarAdministradores();
-const novaLista = listaAdministradores.filter(
-    (administrador) => 
-administrador.id!= id
-    
-);
-localStorage.setItem("listaAdministradores", JSON.stringify(novaLista));
+async function excluirAdministrador(id: string){
+    try {
+        const resposta = await axios.delete(API + "/" + id)
+        setMensagem(resposta.data.mensagem);
+    } catch (error) {
+        console.log(error);
+        setMensagem("Erro ao excluir administrador: " + error);
+    }
 }
 
-function alterarAdministrador(
+async function alterarAdministrador(
     evento: React.SubmitEvent<HTMLFormElement>, 
 id: string) {
 evento.preventDefault();
+try {
+    const resposta  = await axios.put(API + "/" + id, {
+            nome, email, senha
+    });
+setMensagem(resposta.data.mensagem);
+    setTimeout(() => {
+        navigate("/telaListaAdm");
+    }, 1000);
 
-const listaAdministradores = buscarAdministradores();
-
-const novaLista = listaAdministradores.map(
-    (administrador) => {
-if(administrador.id == id                         ){
-return {
-    id, nome, email, senha
-};
+} catch (error) {
+    console.log(error);
+    setMensagem("Erro ao alterar administrador: " + error);
 }
-return(administrador)
-}
-);
-localStorage.setItem("listaAdministradores", JSON.stringify(novaLista));
-
-setMensagem("Administrador Alterado com sucesso");
-setTimeout(() => {
-navigate("/telaListaAdm"); 
-}, 1000);
 }
 
 return({
